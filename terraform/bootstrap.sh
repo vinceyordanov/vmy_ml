@@ -5,6 +5,6 @@
 #     --default-storage-class=standard \
 #     --location=europe-west4
 
-  gcloud storage buckets update gs://r-server-326920-tf-states \
-    --versioning \
-    --lifecycle-file="./tf-state-bucket-lifecycle.json"
+  # gcloud storage buckets update gs://r-server-326920-tf-states \
+  #   --versioning \
+  #   --lifecycle-file="./tf-state-bucket-lifecycle.json"

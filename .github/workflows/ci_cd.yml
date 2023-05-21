@@ -34,11 +34,11 @@ jobs:
      
 
     # Executes bash script which checks if Terraform state-file buckets already exist, if not, they are created. 
-      - name: 'Initialize the pre-requisites for Terraform configuration'
-        id: initialize
-        run:  bash ./bootstrap.sh
-        env:
-          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }} 
+      # - name: 'Initialize the pre-requisites for Terraform configuration'
+      #   id: initialize
+      #   run:  bash ./bootstrap.sh
+      #   env:
+      #     GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }} 
 
 
     # Install the preferred version of Terraform CLI 
