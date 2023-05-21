@@ -1,0 +1,5 @@
+project_id                              = "r-server-326920"
+region                                  = "EU"
+zone                                    = "EU"
+service_account                         = "terraform@r-server-326920.iam.gserviceaccount.com"
+artifacts_repository_name               = "deploy-ml-model"
