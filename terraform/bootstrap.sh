@@ -1,21 +1,10 @@
 # -- Run this whenever initializing the terraform configuration for the first time -- #
 
-storage_buckets=$(gcloud storage ls)
-
-if [ -z "${storage_buckets}" ]
-
-then 
-  gcloud storage buckets create ${BUCKET_ID} \
-    --project=${PROJECT_ID} \
+gcloud storage buckets create gs://r-server-326920-tf-states \
+    --project=r-server-326920 \
     --default-storage-class=standard \
     --location=europe-west4
 
-  gcloud storage buckets update ${BUCKET_ID} \
+  gcloud storage buckets update gs://r-server-326920-tf-states \
     --versioning \
     --lifecycle-file="./terraform/tf-state-bucket-lifecycle.json"
-
-
-else
-    echo "No need to create any storage buckets."
-fi
-
