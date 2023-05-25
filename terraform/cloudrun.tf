@@ -19,7 +19,6 @@ locals {
   artifact_storage_address = "europe-west4-docker.pkg.dev/r-server-326920/deploy-ml-model/model"
 }
 
-
 # ----- Custom action used to call docker build on updates of tf configuration. Should only be ran once ----- # 
 
 # resource "null_resource" "docker_build" {
@@ -37,10 +36,31 @@ locals {
 
 # ------ Used to retreive the specific container image URL in the Artifact Registry ------ #  
 
-data "docker_registry_image" "main" {
-  name = "${local.artifact_storage_address}"
+# data "docker_registry_image" "main" {
+#   name = "${local.artifact_storage_address}"
+# }
+
+
+
+# ----- Custom action used to retreive the image URL from the Artifact Registry ----- # 
+
+resource "null_resource" "docker_pull" {
+
+    triggers = {
+        always_run  = timestamp()
+    }
+
+    provisioner "local-exec" {
+        working_dir = path.module
+        command     = "docker images --no-trunc --format '{{.ID}}' >> ${path.module}/docker_output.txt"
+    }
 }
 
+
+data "local_file" "docker_output" {
+    filename   = "${path.module}/docker_output.txt"
+    depends_on = ["null_resource.docker_pull"]
+}
 
 
 # ----- Create GCP cloud run service on which to deploy our containerized ML model & API ----- # 
@@ -59,7 +79,7 @@ resource "google_cloud_run_service" "default" {
     template {
       spec {
         containers {
-          image = "${local.artifact_storage_address}@${data.docker_registry_image.main.sha256_digest}"
+          image = "${local.artifact_storage_address}@${data.local_file.docker_output.content}"
         }
       }
     }
