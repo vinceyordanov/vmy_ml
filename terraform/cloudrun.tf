@@ -1,3 +1,4 @@
+# ----- Artifact registry to which docker containers will be deployed ----- #
 
 resource "google_artifact_registry_repository" "main" {
   project       = var.project_id
@@ -12,6 +13,8 @@ resource "google_artifact_registry_repository" "main" {
 }
 
 
+# ----- Define properly formatted variable names to be used as image address ----- #
+
 locals {
   artifact_repository_name = var.artifact_repository_name
   artifact_storage_address = "${var.region}-docker.pkg.dev/${var.project}/${local.artifact_repository_name}/model"
@@ -23,6 +26,9 @@ data "docker_registry_image" "main" {
   name = "${local.artifact_storage_address}:${local.image_tag}"
 }
 
+
+
+# ----- Custom action used to call docker build on updates of tf configuration ----- # 
 
 resource "null_resource" "docker_build" {
 
@@ -37,6 +43,7 @@ resource "null_resource" "docker_build" {
 }
 
 
+# ----- Create GCP cloud run service on which to deploy our containerized ML model & API ----- # 
 
 resource "google_cloud_run_service" "default" {
     name     = "containerized_model"
@@ -62,6 +69,8 @@ resource "google_cloud_run_service" "default" {
   }
  }
 
+
+# ----- Cloud run invoker ----- # 
 
 data "google_iam_policy" "noauth" {
    binding {
