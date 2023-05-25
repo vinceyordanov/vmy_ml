@@ -59,7 +59,6 @@ resource "null_resource" "docker_pull" {
 
 data "local_file" "docker_output" {
     filename   = "${path.module}/docker_output.txt"
-    depends_on = ["null_resource.docker_pull"]
 }
 
 
