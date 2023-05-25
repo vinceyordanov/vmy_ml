@@ -20,19 +20,27 @@ locals {
 }
 
 
-# ----- Custom action used to call docker build on updates of tf configuration ----- # 
+# ----- Custom action used to call docker build on updates of tf configuration. Should only be ran once ----- # 
 
-resource "null_resource" "docker_build" {
+# resource "null_resource" "docker_build" {
 
-    triggers = {
-        always_run  = timestamp()
-    }
+#     triggers = {
+#         always_run  = timestamp()
+#     }
 
-    provisioner "local-exec" {
-        working_dir = path.module
-        command     = "docker build -t ${local.artifact_storage_address} . && docker push ${local.artifact_storage_address}"
-    }
+#     provisioner "local-exec" {
+#         working_dir = path.module
+#         command     = "docker build -t ${local.artifact_storage_address} . && docker push ${local.artifact_storage_address}"
+#     }
+# }
+
+
+# ------ Used to retreive the specific container image URL in the Artifact Registry ------ #  
+
+data "docker_registry_image" "main" {
+  name = "${local.artifact_storage_address}"
 }
+
 
 
 # ----- Create GCP cloud run service on which to deploy our containerized ML model & API ----- # 
@@ -51,7 +59,7 @@ resource "google_cloud_run_service" "default" {
     template {
       spec {
         containers {
-          image = "${local.artifact_storage_address}"
+          image = "${local.artifact_storage_address}@${data.docker_registry_image.main.sha256_digest}"
         }
       }
     }
@@ -61,6 +69,7 @@ resource "google_cloud_run_service" "default" {
     latest_revision = true
   }
  }
+
 
 
 # ----- Cloud run invoker ----- # 
