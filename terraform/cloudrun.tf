@@ -65,7 +65,7 @@ data "local_file" "docker_output" {
 # ----- Create GCP cloud run service on which to deploy our containerized ML model & API ----- # 
 
 resource "google_cloud_run_service" "default" {
-    name     = "containerized-model"
+    name     = "containerized-model-ml"
     location = var.region
     project  = var.project_id
 
