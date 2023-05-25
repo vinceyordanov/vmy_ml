@@ -29,7 +29,7 @@ get_prediction = function(arg_1, arg_2, arg_3, arg_4) {
 }
 
 
-# -- Create API endpoint to feed new data to model -- #  
+# -- Create API endpoint to receive & feed new data to model -- #  
 
 newBeakr() %>% 
   httpGET(path = "/predict", decorate(get_prediction)) %>%    # Respond to GET requests at the "/predict" route
