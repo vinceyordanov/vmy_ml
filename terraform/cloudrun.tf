@@ -34,14 +34,6 @@ locals {
 # }
 
 
-# ------ Used to retreive the specific container image URL in the Artifact Registry ------ #  
-
-# data "docker_registry_image" "main" {
-#   name = "${local.artifact_storage_address}"
-# }
-
-
-
 # ----- Custom action used to retreive the image URL from the Artifact Registry ----- # 
 
 resource "null_resource" "docker_pull" {
@@ -79,6 +71,10 @@ resource "google_cloud_run_service" "default" {
       spec {
         containers {
           image = "${local.artifact_storage_address}:latest"
+          #command = ["/Rscript"]
+          ports {
+            container_port = 8001
+          }
         }
       }
     }
