@@ -78,7 +78,7 @@ resource "google_cloud_run_service" "default" {
     template {
       spec {
         containers {
-          image = "${local.artifact_storage_address}@${data.local_file.docker_output.content}"
+          image = "${local.artifact_storage_address}:latest"
         }
       }
     }
