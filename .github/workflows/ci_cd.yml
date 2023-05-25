@@ -41,10 +41,10 @@ jobs:
         run: 'gcloud info'
 
     # Configure & Authenticate docker to GCP 
-      - name: Configure Docker Client of Gcloud
+      - name: Configure Docker Client in GCP via gcloud
         run:  |-
           gcloud auth configure-docker --quiet
-          gcloud auth configure-docker eu-west4-docker.pkg.dev --quiet
+          gcloud auth configure-docker europe-west4-docker.pkg.dev --quiet
     
 
     # Executes bash script which checks if Terraform state-file buckets already exist, if not, they are created. 
