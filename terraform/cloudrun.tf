@@ -35,7 +35,7 @@ resource "null_resource" "docker_build" {
 
     provisioner "local-exec" {
         working_dir = path.module
-        command     = "docker build -t ${local.name} . && docker push ${local.name}"
+        command     = "docker build -t ${local.artifact_storage_address} . && docker push ${local.artifact_storage_address}"
     }
 }
 
