@@ -12,7 +12,7 @@ RUN R -e "install.packages('randomForest')"
 RUN R -e "install.packages('caret')"
 
 # Expose the used port from beakr
-EXPOSE 8001
+EXPOSE 8080
 
 # Load Script with model
 #ADD . /app
