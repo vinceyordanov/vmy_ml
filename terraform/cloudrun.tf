@@ -38,8 +38,9 @@ resource "null_resource" "docker_build" {
 # ----- Create GCP cloud run service on which to deploy our containerized ML model & API ----- # 
 
 resource "google_cloud_run_service" "default" {
-    name     = "containerized_model"
+    name     = "containerized-model"
     location = var.region
+    project  = var.project_id
 
     metadata {
       annotations = {

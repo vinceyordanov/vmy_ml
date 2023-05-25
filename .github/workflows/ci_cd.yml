@@ -32,6 +32,20 @@ jobs:
         with:
           credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
      
+    # Set up google cloud SDK 
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v1'
+
+    # Verify setup has been successful 
+      - name: 'Use gcloud CLI'
+        run: 'gcloud info'
+
+    # Configure & Authenticate docker to GCP 
+      - name: Configure Docker Client of Gcloud
+        run:  |-
+          gcloud auth configure-docker --quiet
+          gcloud auth configure-docker eu-west4-docker.pkg.dev --quiet
+    
 
     # Executes bash script which checks if Terraform state-file buckets already exist, if not, they are created. 
       # - name: 'Initialize the pre-requisites for Terraform configuration'
