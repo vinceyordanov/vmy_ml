@@ -19,11 +19,6 @@ locals {
   artifact_storage_address = "europe-west4-docker.pkg.dev/r-server-326920/deploy-ml-model/model"
 }
 
-data "docker_registry_image" "main" {
-  name = "${local.artifact_storage_address}"
-}
-
-
 
 # ----- Custom action used to call docker build on updates of tf configuration ----- # 
 
@@ -55,7 +50,7 @@ resource "google_cloud_run_service" "default" {
     template {
       spec {
         containers {
-          image = "${local.artifact_storage_address}@${data.docker_registry_image.main.sha256_digest}"
+          image = "${local.artifact_storage_address}"
         }
       }
     }
