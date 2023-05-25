@@ -16,14 +16,11 @@ resource "google_artifact_registry_repository" "main" {
 # ----- Define properly formatted variable names to be used as image address ----- #
 
 locals {
-  artifact_repository_name = var.artifact_repository_name
-  artifact_storage_address = "${var.region}-docker.pkg.dev/${var.project_id}/${local.artifact_repository_name}/model"
-  image_tag                = "1.0.0"
-  name                     = "${local.artifact_storage_address}:${local.image_tag}"
+  artifact_storage_address = "europe-west4-docker.pkg.dev/r-server-326920/deploy-ml-model/model"
 }
 
 data "docker_registry_image" "main" {
-  name = "${local.artifact_storage_address}:${local.image_tag}"
+  name = "${local.artifact_storage_address}"
 }
 
 
