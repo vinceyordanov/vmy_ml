@@ -5,13 +5,14 @@ library(mlr)
 
 
 
-# -- Load the trained model -- # 
+# -- Load the locally trained model -- # 
 
 model = readRDS("iris_rf.rds")
 
 
 
-# --- This function takes in the 4 arguments sent in through the API GET request --- # 
+# --- This function receives the 4 input values for the model that were sent in through the GET request 
+# --- And then formats them into a dataform which can be passed into the model for prediction 
 
 get_prediction = function(arg_1, arg_2, arg_3, arg_4) {
   
