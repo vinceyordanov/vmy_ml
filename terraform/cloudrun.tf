@@ -22,17 +22,17 @@ locals {
 
 # ----- Custom action used to call docker build on updates of tf configuration. ----- # 
 
-resource "null_resource" "docker_build" {
+# resource "null_resource" "docker_build" {
 
-    triggers = {
-        always_run  = timestamp()
-    }
+#     triggers = {
+#         always_run  = timestamp()
+#     }
 
-    provisioner "local-exec" {
-        working_dir = path.module
-        command     = "docker build -t ${local.artifact_storage_address}:2.0.0 . && docker push ${local.artifact_storage_address}:2.0.0"
-    }
-}
+#     provisioner "local-exec" {
+#         working_dir = path.module
+#         command     = "docker build -t ${local.artifact_storage_address}:2.0.0 . && docker push ${local.artifact_storage_address}:2.0.0"
+#     }
+# }
 
 
 
