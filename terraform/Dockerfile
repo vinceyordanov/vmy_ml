@@ -14,8 +14,12 @@ RUN R -e "install.packages('caret')"
 # Expose the used port from beakr
 EXPOSE 8080
 
+# Add script
+
+ADD . /app
+
 # Set current working directory to the directory where the Model & App live.
-# WORKDIR '../src'
+WORKDIR /app
 
 # Run the R script that contains the application
 CMD ["Rscript", "./backend.R"]
