@@ -15,7 +15,7 @@ RUN R -e "install.packages('caret')"
 EXPOSE 8080
 
 # Set current working directory to the directory where the Model & App live.
-WORKDIR '../src'
+# WORKDIR '../src'
 
 # Run the R script that contains the application
 CMD ["Rscript", "./backend.R"]
