@@ -16,27 +16,12 @@ resource "google_artifact_registry_repository" "main" {
 # ----- Define properly formatted variable names to be used as image address ----- #
 
 locals {
-  artifact_storage_address = "europe-west4-docker.pkg.dev/r-server-326920/deploy-ml-model/model"
+  artifact_storage_address = "${var.region}.pkg.dev/${var.project_id}/deploy-ml-model/model"
 }
 
-# ----- Custom action used to call docker build on updates of tf configuration. Should only be ran once ----- # 
+# ----- Custom action used to call docker build on updates of tf configuration. ----- # 
 
-# resource "null_resource" "docker_build" {
-
-#     triggers = {
-#         always_run  = timestamp()
-#     }
-
-#     provisioner "local-exec" {
-#         working_dir = path.module
-#         command     = "docker build -t ${local.artifact_storage_address} . && docker push ${local.artifact_storage_address}"
-#     }
-# }
-
-
-# ----- Custom action used to retreive the image URL from the Artifact Registry ----- # 
-
-resource "null_resource" "docker_pull" {
+resource "null_resource" "docker_build" {
 
     triggers = {
         always_run  = timestamp()
@@ -44,14 +29,10 @@ resource "null_resource" "docker_pull" {
 
     provisioner "local-exec" {
         working_dir = path.module
-        command     = "docker images --no-trunc --format '{{.ID}}' >> ${path.module}/docker_output.txt"
+        command     = "docker build -t ${local.artifact_storage_address} . && docker push ${local.artifact_storage_address}"
     }
 }
 
-
-data "local_file" "docker_output" {
-    filename   = "${path.module}/docker_output.txt"
-}
 
 
 # ----- Create GCP cloud run service on which to deploy our containerized ML model & API ----- # 
@@ -71,7 +52,7 @@ resource "google_cloud_run_service" "default" {
       spec {
         containers {
           image = "${local.artifact_storage_address}:latest"
-          command = ["/Rscript", "./../src/backend.R"]
+          # command = ["/Rscript", "./backend.R"]
           ports {
             container_port = 8001
           }

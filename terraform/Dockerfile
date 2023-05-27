@@ -12,13 +12,10 @@ RUN R -e "install.packages('randomForest')"
 RUN R -e "install.packages('caret')"
 
 # Expose the used port from beakr
-# EXPOSE 8001
+EXPOSE 8001
 
-# Load Script with model
-#ADD . /app
-
-# set current working directory to the added app directory
-#WORKDIR /app
+# Set current working directory to the directory where the Model & App live.
+WORKDIR '../src'
 
 # Run the R script that contains the application
-CMD ["Rscript", "./../src/backend.R"]
+CMD ["Rscript", "./backend.R"]
