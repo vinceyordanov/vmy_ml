@@ -16,22 +16,22 @@ resource "google_artifact_registry_repository" "main" {
 # ----- Define properly formatted variable names to be used as image address ----- #
 
 locals {
-  artifact_storage_address = "${var.region}.pkg.dev/${var.project_id}/deploy-ml-model/model"
+  artifact_storage_address = "europe-west4-docker.pkg.dev/r-server-326920/deploy-ml-model/model"
 }
 
 # ----- Custom action used to call docker build on updates of tf configuration. ----- # 
 
-resource "null_resource" "docker_build" {
+# resource "null_resource" "docker_build" {
 
-    triggers = {
-        always_run  = timestamp()
-    }
+#     triggers = {
+#         always_run  = timestamp()
+#     }
 
-    provisioner "local-exec" {
-        working_dir = path.module
-        command     = "docker build -t ${local.artifact_storage_address} . && docker push ${local.artifact_storage_address}"
-    }
-}
+#     provisioner "local-exec" {
+#         working_dir = path.module
+#         command     = "docker build -t ${local.artifact_storage_address} . && docker push ${local.artifact_storage_address}"
+#     }
+# }
 
 
 
@@ -51,8 +51,8 @@ resource "google_cloud_run_service" "default" {
     template {
       spec {
         containers {
-          image = "${local.artifact_storage_address}:latest"
-          # command = ["/Rscript", "./backend.R"]
+          image = "${local.artifact_storage_address}"
+          command = ["Rscript", "./backend.R"]
           ports {
             container_port = 8001
           }
