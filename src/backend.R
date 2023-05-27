@@ -35,5 +35,5 @@ get_prediction = function(arg_1, arg_2, arg_3, arg_4) {
 newBeakr() %>% 
   httpGET(path = "/predict", decorate(get_prediction)) %>%    # Respond to GET requests at the "/predict" route
   handleErrors() %>%                                          # Handle any errors with a JSON response
-  listen(host = "0.0.0.0", port = 8001)                       # Start the server on port 8001
+  listen(host = "0.0.0.0", port = 8080)                       # Start the server on port 8001
 

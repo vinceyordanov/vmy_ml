@@ -21,24 +21,24 @@ locals {
 
 # ----- Custom action used to call docker build on updates of tf configuration. ----- # 
 
-# resource "null_resource" "docker_build" {
+resource "null_resource" "docker_build" {
 
-#     triggers = {
-#         always_run  = timestamp()
-#     }
+    triggers = {
+        always_run  = timestamp()
+    }
 
-#     provisioner "local-exec" {
-#         working_dir = path.module
-#         command     = "docker build -t ${local.artifact_storage_address} . && docker push ${local.artifact_storage_address}"
-#     }
-# }
+    provisioner "local-exec" {
+        working_dir = path.module
+        command     = "docker build -t ${local.artifact_storage_address}:1.0.0 . && docker push ${local.artifact_storage_address}:1.0.0"
+    }
+}
 
 
 
 # ----- Create GCP cloud run service on which to deploy our containerized ML model & API ----- # 
 
 resource "google_cloud_run_service" "default" {
-    name     = "containerized-model-ml"
+    name     = "containerized-model-r"
     location = var.region
     project  = var.project_id
 
@@ -52,9 +52,8 @@ resource "google_cloud_run_service" "default" {
       spec {
         containers {
           image = "${local.artifact_storage_address}"
-          #command = ["Rscript", "./backend.R"]
           ports {
-            container_port = 8001
+            container_port = 8080
           }
         }
       }
