@@ -52,7 +52,7 @@ resource "google_cloud_run_service" "default" {
       spec {
         containers {
           image = "${local.artifact_storage_address}"
-          command = ["Rscript", "./backend.R"]
+          #command = ["Rscript", "./backend.R"]
           ports {
             container_port = 8001
           }
