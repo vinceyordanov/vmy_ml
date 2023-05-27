@@ -21,17 +21,17 @@ locals {
 
 # ----- Custom action used to call docker build on updates of tf configuration. ----- # 
 
-resource "null_resource" "docker_build" {
+# resource "null_resource" "docker_build" {
 
-    triggers = {
-        always_run  = timestamp()
-    }
+#     triggers = {
+#         always_run  = timestamp()
+#     }
 
-    provisioner "local-exec" {
-        working_dir = path.module
-        command     = "docker build -t ${local.artifact_storage_address}:1.0.0 . && docker push ${local.artifact_storage_address}:1.0.0"
-    }
-}
+#     provisioner "local-exec" {
+#         working_dir = path.module
+#         command     = "docker build -t ${local.artifact_storage_address}:1.0.0 . && docker push ${local.artifact_storage_address}:1.0.0"
+#     }
+# }
 
 
 
@@ -51,7 +51,7 @@ resource "google_cloud_run_service" "default" {
     template {
       spec {
         containers {
-          image = "${local.artifact_storage_address}"
+          image = "${local.artifact_storage_address}:1.0.0"
           ports {
             container_port = 8080
           }
