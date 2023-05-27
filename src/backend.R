@@ -6,7 +6,7 @@ library(mlr)
 
 
 
-# -- Load the locally trained model -- # 
+# -- Load the locally trained model --- # 
 
 model = readRDS("iris_rf.rds")
 
