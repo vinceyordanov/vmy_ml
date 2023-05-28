@@ -16,10 +16,9 @@ EXPOSE 8080
 
 # Change to the directory containing R script 
 # RUN ["/bin/sh" , "-c" , "cd ../src" ] 
-RUN [ "cp", "/src/backend.R", "/terraform" ]
-RUN [ "cp", "/src/iris_rf.rds", "/terraform" ]
+# RUN [ "cp", "/src/backend.R", "/terraform" ]
+# RUN [ "cp", "/src/iris_rf.rds", "/terraform" ]
 
-WORKDIR /terraform
 
 # Add script
 ADD . /app
