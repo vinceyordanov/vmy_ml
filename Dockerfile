@@ -14,8 +14,14 @@ RUN R -e "install.packages('caret')"
 # Expose the used port from beakr
 EXPOSE 8080
 
-# Add script
+# Change to the directory containing R script 
+# RUN ["/bin/sh" , "-c" , "cd ../src" ] 
+RUN [ "cp", "/src/backend.R", "/terraform" ]
+RUN [ "cp", "/src/iris_rf.rds", "/terraform" ]
 
+WORKDIR /terraform
+
+# Add script
 ADD . /app
 
 # Set current working directory to the directory where the Model & App live.

@@ -17,22 +17,23 @@ resource "google_artifact_registry_repository" "main" {
 
 locals {
   artifact_storage_address = "europe-west4-docker.pkg.dev/r-server-326920/deploy-ml-model/model"
-  #tag                      = "2.0.0"
+  tag                      = "4.0.0"
 }
+
 
 # ----- Custom action used to call docker build on updates of tf configuration. ----- # 
 
-# resource "null_resource" "docker_build" {
+resource "null_resource" "docker_build" {
 
-#     triggers = {
-#         always_run  = timestamp()
-#     }
+    triggers = {
+        always_run  = timestamp()
+    }
 
-#     provisioner "local-exec" {
-#         working_dir = path.module
-#         command     = "docker build -t ${local.artifact_storage_address}:3.0.0 . && docker push ${local.artifact_storage_address}:3.0.0"
-#     }
-# }
+    provisioner "local-exec" {
+        working_dir = path.module
+        command     = "docker build -t ${local.artifact_storage_address}:${local.tag} . && docker push ${local.artifact_storage_address}:${local.tag}"
+    }
+}
 
 
 
@@ -42,29 +43,25 @@ resource "google_cloud_run_service" "default" {
     name     = "containerized-model-r"
     location = var.region
     project  = var.project_id
-
     metadata {
       annotations = {
         "run.googleapis.com/client-name" = "terraform"
       }
     }
-
     template {
       spec {
         containers {
-          image = "${local.artifact_storage_address}:3.0.0"
-          # command = [ "Rscript", "./backend.R" ]
+          image = "${local.artifact_storage_address}:${local.tag}"
           ports {
             container_port = 8080
           }
         }
       }
     }
-
     traffic {
-    percent         = 100
-    latest_revision = true
-  }
+        percent         = 100
+        latest_revision = true
+    }
  }
 
 
