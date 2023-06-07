@@ -17,7 +17,7 @@ resource "google_artifact_registry_repository" "main" {
 
 locals {
   artifact_storage_address = "europe-west1-docker.pkg.dev/r-server-326920/deploy-ml-model/model"
-  tag                      = "4.0.0"
+  tag                      = "5.0.0"
 }
 
 

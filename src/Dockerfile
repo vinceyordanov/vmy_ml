@@ -1,5 +1,5 @@
-# Install R-version 3.6.3 as image
-FROM rocker/r-ver:3.6.3
+# Install R-version 4.3.0 as image
+FROM rocker/r-ver:4.3.0
 
 # Install required ubuntu libraries for 'mlr'
 RUN apt-get update -qq && apt-get install -y \
