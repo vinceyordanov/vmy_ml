@@ -1,3 +1,4 @@
 container_version=1         # Existing container version 
 container_version=2         # Adding cloud scheduler.
 container_version=3         # Changed R image version to 4.3.0 and added image tag 5.0.0 to container address.
+container_version=4         # Changed location to europe-west4

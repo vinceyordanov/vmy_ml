@@ -44,7 +44,7 @@ jobs:
       - name: Configure Docker Client in GCP via gcloud
         run:  |-
           gcloud auth configure-docker --quiet
-          gcloud auth configure-docker europe-west1-docker.pkg.dev --quiet
+          gcloud auth configure-docker europe-west4-docker.pkg.dev --quiet
     
 
     # Executes bash script which checks if Terraform state-file buckets already exist, if not, they are created. 
