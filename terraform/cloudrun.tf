@@ -60,6 +60,7 @@ resource "google_cloud_run_service" "default" {
         containers {
           image = "${local.artifact_storage_address}:${local.tag}"
           ports {
+            name = "h2c"
             container_port = 8080
           }
         }

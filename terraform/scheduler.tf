@@ -24,7 +24,7 @@ resource "google_cloud_scheduler_job" "default" {
     uri         = "${google_cloud_run_service.default.status[0].url}/predict?arg_1=5.4&arg_2=3.1&arg_3=1.2&arg_4=0.4"
     headers     = {"Content-Type" : "application/json", "User-Agent" : "Google-Cloud-Scheduler"}
     oidc_token {
-      service_account_email = "scheduler-sa@r-server-326920.iam.gserviceaccount.com"
+      service_account_email = "r-server-326920-tf-states@r-server-326920.iam.gserviceaccount.com"
     }
   }
 }
