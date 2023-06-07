@@ -25,8 +25,3 @@ variable "artifact_repository_name" {
   description = "Name of Cloud Artifacts Registry"
   type        = string
 }
-
-variable "scheduler_sa_roles" {
-  description = "List of roles for Cloud Scheduler job SA"
-  type        = list(string)
-}
