@@ -16,24 +16,31 @@ resource "google_artifact_registry_repository" "main" {
 # ----- Define properly formatted variable names to be used as image address ----- #
 
 locals {
-  artifact_storage_address = "europe-west4-docker.pkg.dev/r-server-326920/deploy-ml-model/model"
+  artifact_storage_address = "europe-west1-docker.pkg.dev/r-server-326920/deploy-ml-model/model"
   tag                      = "4.0.0"
+}
+
+
+# -- Create an instance of the file we're monitoring for changes to trigger docker build -- # 
+
+resource "local_file" "model_version" {
+  content = templatefile("${path.module}/../src/changelog.txt", {})
+  filename = "${path.module}/../src/changelog.txt"
 }
 
 
 # ----- Custom action used to call docker build on updates of tf configuration. ----- # 
 
-# resource "null_resource" "docker_build" {
-
-#     triggers = {
-#         always_run  = timestamp()
-#     }
-
-#     provisioner "local-exec" {
-#         working_dir = path.module
-#         command     = "cd ../src && docker build -t ${local.artifact_storage_address}:${local.tag} . && docker push ${local.artifact_storage_address}:${local.tag}"
-#     }
-# }
+resource "null_resource" "docker_build" {
+    triggers = {
+        file_changed = md5(local_file.model_version.content)
+    }
+    provisioner "local-exec" {
+        working_dir = path.module
+        command     = "cd ../src && docker build -t ${local.artifact_storage_address}:${local.tag} . && docker push ${local.artifact_storage_address}:${local.tag}"
+    }
+    depends_on = [local_file.model_version]
+}
 
 
 
@@ -62,6 +69,9 @@ resource "google_cloud_run_service" "default" {
         percent         = 100
         latest_revision = true
     }
+    depends_on = [
+        null_resource.docker_build
+    ]
  }
 
 
@@ -79,7 +89,6 @@ data "google_iam_policy" "noauth" {
    location    = google_cloud_run_service.default.location
    project     = google_cloud_run_service.default.project
    service     = google_cloud_run_service.default.name
-
    policy_data = data.google_iam_policy.noauth.policy_data
 }
 
